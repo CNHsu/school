@@ -3,10 +3,22 @@
 // branch1
 // branch1 modify1
 // branch1 modify2
+<<<<<<< HEAD
 // branch2 initial
 // branch2 modify1
 // branch2 modify2
 // branch6
+=======
+//
+// branch2 merge to
+// branch3
+// branch3 modify1
+// branch4 
+// branch2-5 
+// branch2-5 modify1
+// branch2-5 modify2
+>>>>>>> branch2-5
+>>>>>>> branch4
 #include <stdio.h>
 #include <ctype.h>
 
