@@ -1,4 +1,6 @@
 // ID check 
+// study git operation
+// branch1
 #include <stdio.h>
 #include <ctype.h>
 
