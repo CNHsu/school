@@ -2,6 +2,7 @@
 // study git operation
 // branch1
 // branch1 modify1
+// branch1 modify2
 #include <stdio.h>
 #include <ctype.h>
 
