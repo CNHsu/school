@@ -1,7 +1,20 @@
 // 2022/5/10
 
 #include <stdio.h>
-// define color
+#include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <time.h>
+#include <windows.h> // for windows consol only
+
+void Redtext();
+void normal();
+void WGray();
+void WGreen();
+void WYellow();
+void WR();
+
+// define color, for unix consol 
 #define NONE "\033[m"
 #define RED "\033[0;32;31m"
 #define LIGHT_RED "\033[1;31m"
@@ -25,44 +38,106 @@ char str1[5][6]={"Anita","Beryl","Chloc","Doris","Emily"};
 char str2[100];
 int Error;
 int main()
-
 {
 int i,j;
-int g,y,r; // r=match, y=not match, g=error
+unsigned char g,y,r; // r=match, y=not match, g=error
 
 // random
 srand(time(NULL));
 int a=(rand()%5); // random range
+Redtext();
+printf("random index = %d",a);
+normal();
+
 
 // chek input
     for(i=0;i<5;i++)
-    printf("%s ",str1[i]);
+       printf("%s ",str1[i]);
  while(1){
+	 
 	 printf("\ninput guess text: ");
 	 scanf("%s", str2);
-	 if(strlen(str2)>5) printf("\033[0;32;31mInput Error!\n");
+	 if(strlen(str2)>5) {
+		 Redtext();
+		 printf("Input Error!\n");
+		 normal();
+	 }
 	 else {
 		 for(i=0,Error=0;i<5;i++) {
-			 Error=isaplha(str2[i])|Error;
+			 Error= (!isalpha(str2[i]))|Error;
 	    }
-		if(Error) printf(RED"Input not aplha\n");
+		if(Error) {
+			Redtext(); 
+			printf("Input not aplha\n"); 
+			normal();
+			}
 		else{
 			for(j=0,g=y=r=0;j<5;j++)
-            for(i=0;i<5;i++) {
-				if(str1[a][i]==str2[j]) {
-					if(i==j) r = r | 1<<i;
-					else y=y| 1<<j;
+            for(i=0,Error=1;i<5;i++) {
+				if(toupper(str1[a][i])==toupper(str2[j])) {
+					if(i==j) {
+						r = r | 1<<i; // correct green
+						WGreen();
+						putch(str2[j]);
+						normal();
+						Error=0;
+					}
+					else {
+						y=y| 1<<j;        // position error yellow
+						WYellow();
+						putch(str2[j]);
+						normal();
+                        Error=0;						
+					}
 			    }
-				else g = g | 1<< g;
+				else if(Error==1 && i==4){
+					g = g | 1<< g;        // all error gray
+						WGray();
+						putch(str2[j]);
+						normal();
+                     Error=0;						
+				}
 			}
 		}
-		printf("answoer =%s\n",str1[a]);
-		printf(" r=%x, y=%x, g=%x",r,y,g);
+		printf("\n answer =%s\n",str1[a]);
+		printf(" r=%1x, y=%1x, g=%1x",r,y,g);
 		 
 	 }	 
 	 
 	 
 }
-
 return 0;
+}
+
+//值為xx。x為一位16進位制數，即0~F
+//都可以使用，可以隨意組合。
+
+//0~F 分別代表的顏色如下：
+
+//0 = 黑色 8 = 灰色 1 = 淡藍 9 = 藍色
+//2 = 淡綠 A = 綠色 3 = 湖藍 B = 淡淺綠
+//C = 紅色 4 = 淡紅 5 = 紫色 D = 淡紫
+//6 = 黃色 E = 淡黃 7 = 白色 F = 亮白
+void Redtext(){
+    SetConsoleTextAttribute( GetStdHandle(STD_OUTPUT_HANDLE), 0x0C ); // c:red + 0:white
+//    puts("One two three\tfour");
+//    SetConsoleTextAttribute( GetStdHandle(STD_OUTPUT_HANDLE), 0x0f);
+}
+void normal(){
+	
+ //   SetConsoleTextAttribute( GetStdHandle(STD_OUTPUT_HANDLE), 0x0C ); // c:red + 0:white
+ //   puts("One two three\tfour");
+    SetConsoleTextAttribute( GetStdHandle(STD_OUTPUT_HANDLE), 0x0f);
+}
+void WGray(){	
+    SetConsoleTextAttribute( GetStdHandle(STD_OUTPUT_HANDLE), 0x8F ); // c:red + 0:white
+}
+void WGreen(){	
+    SetConsoleTextAttribute( GetStdHandle(STD_OUTPUT_HANDLE), 0xAF ); // c:red + 0:white
+}
+void WYellow(){
+    SetConsoleTextAttribute( GetStdHandle(STD_OUTPUT_HANDLE), 0x60 ); // c:red + 0:white
+}
+void WR(){
+    SetConsoleTextAttribute( GetStdHandle(STD_OUTPUT_HANDLE), 0xCF ); // c:red + 0:white
 }
