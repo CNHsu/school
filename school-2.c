@@ -1,4 +1,4 @@
-// 2022/5/10
+﻿// 2022/5/10
 
 #include <stdio.h>
 #include <string.h>
@@ -34,14 +34,16 @@ void WR();
 
 
 // you need use [6] inculde string end '\0' to store 5-char string
-char str1[5][6]={"Anita","Beryl","Chloc","Doris","Emily"};
+char str1[5][6]={"AAita","Beeyl","Chllc","Driss","Emily"};
 char str2[100];
+int ii[5]={0,0,0,0,0}; // index to saved checked char
 int Error;
 int main()
 {
 int i,j;
 unsigned char g,y,r; // r=match, y=not match, g=error
 
+ while(1){
 // random
 srand(time(NULL));
 int a=(rand()%5); // random range
@@ -52,8 +54,10 @@ normal();
 
 // chek input
     for(i=0;i<5;i++)
-       printf("%s ",str1[i]);
- while(1){
+	{
+		printf("%s ",str1[i]);
+		ii[i]=0; // initial index check
+	}	
 	 
 	 printf("\ninput guess text: ");
 	 scanf("%s", str2);
@@ -73,27 +77,28 @@ normal();
 			}
 		else{
 			for(j=0,g=y=r=0;j<5;j++)
-            for(i=0,Error=1;i<5;i++) {
-				if(toupper(str1[a][i])==toupper(str2[j])) {
+            for(i=j,Error=1;i<5;i++) { // skip checked char[i]
+				if(ii[j]==0 && (toupper(str1[a][i])==toupper(str2[j]) )) {		// if ii !=0, means this j char not be checked			
 					if(i==j) {
 						r = r | 1<<i; // correct green
 						WGreen();
-						putch(str2[j]);
+						putch(str2[j]); //printf(" : %d %d %d\n",ii[j],i,j);
 						normal();
-						Error=0;
+						Error=0;						
 					}
 					else {
 						y=y| 1<<j;        // position error yellow
 						WYellow();
-						putch(str2[j]);
+						putch(str2[j]);//printf(" : %d %d %d\n",ii[j],i,j);
 						normal();
                         Error=0;						
 					}
+					ii[j]=1; // save checked index
 			    }
 				else if(Error==1 && i==4){
 					g = g | 1<< g;        // all error gray
 						WGray();
-						putch(str2[j]);
+						putch(str2[j]); //printf(" : %d %d %d\n",ii[j],i,j);
 						normal();
                      Error=0;						
 				}
